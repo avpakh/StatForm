@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from django.forms import ModelForm
-from django import  forms
+from django import forms
 from .models import Page1
+from .models import EntDbSpr
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, Button
 from django.forms.models import inlineformset_factory
 from crispy_forms.layout import Fieldset
 from django.forms.formsets import BaseFormSet
+
+
 
 class Page1Form(forms.ModelForm):
 
@@ -23,15 +26,15 @@ class Page1Form(forms.ModelForm):
        ),
            'kod_okpo': forms.TextInput(
                attrs={'id': 'kod_okpo', 'required': True, 'placeholder': 'Введите код ОКПО (12-ти значный)',
-                      'title': 'Введите код ОКПО  - 12-ти значный',
-                      'pattern':'[0-9]{12}',
+                      'title': 'Введите код ОКПО  10 - 12-ти значный',
+                      'pattern':'[0-9]{10,11,12}',
                        }
            ),
            'kod_gvk': forms.TextInput(
                attrs={'maxlenght': '35', 'size': '45', 'id': 'kod_gvk', 'required': True,
                       'placeholder': 'Введите код ГВК',
                       'title': 'Введите код ГВК  (6-7-ти значный код)',
-                      'pattern': '[0-9]{6,7}',
+                      'pattern': '[0-9]{5,6}',
                       }
            ),
            'wateruser_name': forms.Textarea(
@@ -90,58 +93,16 @@ class Page1Form(forms.ModelForm):
        self.helper.html5_required=True
        self.helper.add_input(Submit('submit', 'Принять введенные данные и перейти к Разделу 1 "Водопотребление"'))
 
-class ExampleForm(forms.Form):
-    like_website = forms.TypedChoiceField(
-        label = "Do you like this website?",
-        choices = ((1, "Yes"), (0, "No")),
-        coerce = lambda x: bool(int(x)),
-        widget = forms.RadioSelect,
-        initial = '1',
-        required = True,
-    )
 
-    favorite_food = forms.CharField(
-        label = "What is your favorite food?",
-        max_length = 80,
-        required = True,
-    )
-
-    favorite_color = forms.CharField(
-        label = "What is your favorite color?",
-        max_length = 80,
-        required = True,
-    )
-
-    favorite_number = forms.IntegerField(
-        label = "Favorite number",
-        required = False,
-    )
-
-    notes = forms.CharField(
-        label = "Additional notes or feedback",
-        required = False,
-    )
-
-    def __init__(self, *args, **kwargs):
-        super(ExampleForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'id-exampleForm'
-        self.helper.form_class = 'blueForms'
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'submit_survey'
-
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-class ObjectsListFormHelper(FormHelper):
-    model = Page1
+class ObjectsListFormHelperFind(FormHelper):
+    model = EntDbSpr
     form_show_errors = False
     form_error_title = False
     help_text_inline = True
     html5_required = True
     form_tag = True
     form_class = 'form-inline'
-    layout = Layout('wateruser_name','wateruser_level_name','postal_address',ButtonHolder(
-        Submit('submit', u'Применить фильтры', css_class='btn-primary ',),
-        ))
+    layout = Layout('gup','npr','oku',ButtonHolder(
+        Submit('submit', u'Осуществить запрос ', css_class='btn-primary ',),
 
-
+    ))

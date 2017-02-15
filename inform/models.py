@@ -13,13 +13,24 @@ class SoatoData(models.Model):
 
     class Meta:
         db_table = u'SoatoData'
-
         verbose_name = 'Данные по коду СОAТО'
         verbose_name_plural = 'Данные по кодам СОАТО'
 
-
     def __unicode__(self):
         return u" %s  %s  %s " % (self.soato_nameadd,self.soato_name,self.soato_kode)
+
+
+class EntDbSpr(models.Model):
+    id_entdbspr = models.AutoField(primary_key=True)
+    npr = models.CharField('Полное наименование юридического лица', max_length=400)
+    adr = models.CharField('Почтовый адрес (фактический)', max_length=400)
+    okp = models.CharField('Регистрационный номер респондента (ОКПО)',max_length=400)
+    oku = models.CharField('Учетный номер плательщика (УНП)',max_length=400)
+    gup = models.CharField(' Код респондента по государственного водному кадастру (ГВК)',max_length=400)
+    tel = models.CharField(' Телефон ',max_length=400)
+    vxu = models.CharField('Водохозяйственынй участок',max_length=400)
+
+
 
 class Page1(models.Model):
     id_page1 = models.AutoField(primary_key=True)
@@ -32,26 +43,34 @@ class Page1(models.Model):
     kod_okpo = models.CharField('Регистрационный номер респондента (ОКПО)',max_length=12)
     kod_unn= models.IntegerField('Учетный номер плательщика (УНП)')
     kod_gvk = models.IntegerField(' Код респондента по государственного водному кадастру (ГВК)')
+    razdel1_fill = models.NullBooleanField(blank=True)
+    razdel2_fill = models.NullBooleanField(blank=True)
+    razdel3_fill = models.NullBooleanField(blank=True)
+    razdel4_fill = models.NullBooleanField(blank=True)
 
 class Part4(models.Model):
     id_part4 = models.AutoField(primary_key=True)
     id_page4 = models.ForeignKey(Page1)
-    str_401 = models.IntegerField('Численность жителей населенных пунктов, подключенных к централизованной системе водоснабжения, человек: ')
-    str_402 = models.IntegerField('Численность жителей населенных пунктов, подключенных к централизованной системе водоотведения(канализации), человек: ')
-    str_403 = models.IntegerField('Количество дней работы водопользователя')
-    str_404 = models.FloatField('Разрешенные объемы добычи подземной воды, тыс. куб. м/год:')
-    str_405 = models.FloatField('Разрешенные объемы изъятия поверхностной воды, тыс. куб. м/год:')
-    str_406 = models.FloatField('Разрешенные объемы сброса воды в окружающую среду, тыс. куб. м/год:')
-    str_407 = models.FloatField('Разрешенные объемы сброса воды в поверхностные водные объекты, тыс. куб. м/год:')
-    str_408 = models.FloatField('Суммарная проектная мощность водозаборных сооружений для изъятия поверхностной воды, куб.м/сутки:')
-    str_409 = models.FloatField('Суммарная проектная мощность водозаборных сооружений для добычи подземной воды, куб.м/сутки:')
-    str_410 = models.IntegerField('Количество водозаборных сооружений, предназначенных для изъятия поверхностной воды, единиц ')
-    str_411 = models.IntegerField('Количество приборов учета, установленных на водозаборных сооружениях, предназначенных для изъятия поверхностной воды, единиц')
-    str_412 = models.IntegerField('Количество водозаборных сооружений (скважин), предназначенных для добычи подземной воды - всего, единиц:')
-    str_413 = models.IntegerField('Количество водозаборных сооружений (скважин), предназначенных для добычи подземной воды - ликвдировано, единиц:')
-    str_414 = models.IntegerField('Количество водозаборных сооружений (скважин), предназначенных для добычи подземной воды - законсервировано, единиц:')
-    str_415 = models.IntegerField('Количество приборов учета, установленных на водозаборных сооружениях, предназначенных для добычи подземной воды, единиц')
-    str_416 = models.IntegerField('Количество приборов учета, установленных на очистных сооружениях, единиц')
+    kod_str4 = models.IntegerField('Код строки')
+    value_str = models.CharField(max_length=200)
+    value = models.IntegerField()
+
+    #str_401 = models.IntegerField('Численность жителей населенных пунктов, подключенных к централизованной системе водоснабжения, человек: ')
+    #str_402 = models.IntegerField('Численность жителей населенных пунктов, подключенных к централизованной системе водоотведения(канализации), человек: ')
+    #str_403 = models.IntegerField('Количество дней работы водопользователя')
+    #str_404 = models.FloatField('Разрешенные объемы добычи подземной воды, тыс. куб. м/год:')
+    #str_405 = models.FloatField('Разрешенные объемы изъятия поверхностной воды, тыс. куб. м/год:')
+    #str_406 = models.FloatField('Разрешенные объемы сброса воды в окружающую среду, тыс. куб. м/год:')
+    #str_407 = models.FloatField('Разрешенные объемы сброса воды в поверхностные водные объекты, тыс. куб. м/год:')
+    #str_408 = models.FloatField('Суммарная проектная мощность водозаборных сооружений для изъятия поверхностной воды, куб.м/сутки:')
+    #str_409 = models.FloatField('Суммарная проектная мощность водозаборных сооружений для добычи подземной воды, куб.м/сутки:')
+    #str_410 = models.IntegerField('Количество водозаборных сооружений, предназначенных для изъятия поверхностной воды, единиц ')
+    #str_411 = models.IntegerField('Количество приборов учета, установленных на водозаборных сооружениях, предназначенных для изъятия поверхностной воды, единиц')
+    #str_412 = models.IntegerField('Количество водозаборных сооружений (скважин), предназначенных для добычи подземной воды - всего, единиц:')
+    #str_413 = models.IntegerField('Количество водозаборных сооружений (скважин), предназначенных для добычи подземной воды - ликвдировано, единиц:')
+    #str_414 = models.IntegerField('Количество водозаборных сооружений (скважин), предназначенных для добычи подземной воды - законсервировано, единиц:')
+    #str_415 = models.IntegerField('Количество приборов учета, установленных на водозаборных сооружениях, предназначенных для добычи подземной воды, единиц')
+    #str_416 = models.IntegerField('Количество приборов учета, установленных на очистных сооружениях, единиц')
 
 
 class Part1(models.Model):
@@ -106,7 +125,7 @@ class Part2(models.Model):
     sbros_without = models.FloatField()
     sbros_nogood = models.FloatField()
     sbros_norm = models.FloatField()
-    kod_wwtp=models.CharField(' Код очистных',max_length=6)
+    kod_wwtp=models.CharField(' Код очистных',max_length=6)    #  check legth
     wwtp_project=models.FloatField()
     filtration_fields = models.FloatField()
 

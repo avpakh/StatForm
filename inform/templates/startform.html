@@ -1,0 +1,249 @@
+{% extends "index_form.html" %}
+
+
+{%  load static %}
+
+{% load staticfiles %}
+
+
+{%  block content %}
+
+
+<style>
+
+.add-row {
+display:block;
+margin-top:15px;
+}
+.add-row:before{
+font-family: Arial;
+content: "\f055";
+margin-right: 0.3em;
+
+}
+.delete-row:before{
+font-family: Arial;
+content: "\f056";
+margin-right: 0.3em;
+}
+</style>
+
+<body>
+
+<div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                            <h2>ОТЧЕТ  </h2>
+                        <h3>об использовании воды </h3>
+                           <h4>за 2016 год </h4>
+                       <p>               </p>
+
+                </div>
+
+                </div>
+
+        </div>
+
+<div class="row">
+
+{%  ifequal val_sel 'no selection' %}
+
+            <form role="form"  action="." method="post"> {% csrf_token %}
+              <div class="form-group col-lg-6">
+                  <h4> Выбор режима для заполнения формы 1-Вода (Минприроды) </h4>
+
+                   <label class="radio"  >
+                  <input name="radioGroup" id="radio1" value="option1" type="radio" > 1. Заполнение формы с учетом ранее введенных реквизитов (УНН|ОКПО|код ГВК)
+                    <p> </p>
+                  <input name="radioGroup" id="radio2" value="option2" type="radio" > 2. Заполнение формы без использования данных предыдущих лет
+                    <p> </p>
+                      <button type="submit"  value="Submit" class="btn btn-primary">Принять </button>
+                 </label>
+
+              </div>
+            </form>
+
+     {% endifequal %}
+
+{%  ifequal val_sel 'selection1' %}
+
+<div class="panel panel-primary">
+                       <div class="panel-heading">
+                        <h3 class="panel-title">Задание параметров для ввода формы 1-вода Минприроды</h3>
+                       </div>
+                   </div>
+
+
+
+       <form role="form"  action="." method="post"> {% csrf_token %}
+          <div class="input-group">
+
+            <div class="row">
+
+
+               <div class="col-lg-10">
+
+                   <label for="basic-url"> Раздел I - ВОДОПОТРЕБЛЕНИЕ </label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3"> Количество строк </span>
+                        <input type="number" name="numRazdel1" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    </div>
+
+                   <label for="basic-url"> Раздел II - ВОДООТВЕДЕНИЕ </label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3"> Количество строк </span>
+                        <input type="number" name="numRazdel2" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    </div>
+
+                   <label for="basic-url"> Раздел III - СОДЕРЖАНИЕ ЗАГРЯЗНЯЮЩИХ ВЕЩЕСТВ ... </label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3"> Количество строк </span>
+                        <input type="number" name="numRazdel3" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    </div>
+               </div>
+          </div>
+
+
+               <div class="col-lg-10">
+                   <p> </p>
+                 <div class="row">
+                    <button type="submit"  value="Submit" class="btn btn-primary">Принять </button>
+                 </div>
+               </div>
+
+         </div>
+
+     </form>
+
+
+
+{% endifequal %}
+
+
+{%  ifequal val_sel 'selection2' %}
+ <form role="form"  action="/inform/input/" method="get"> {% csrf_token %}
+
+<div class="panel panel-primary">
+                  <div class="panel-heading">
+                        <h3 class="panel-title">Задание параметров для формирования формы 1-вода Минприроды </h3>
+                       </div>
+                   </div>
+
+            <div class="row">
+
+             <div class="col-lg-8">
+
+               <label for="basic"> Информация о респонденте </label>
+                      <div class="input-group">
+                        <span class="input-group-addon" id="sizing-addon1"> Название предприятия </span>
+                        <input type="text" name="npr" class="form-control"  value="{{ ent_name }}"  aria-describedby="sizing-addon1">
+                    </div>
+
+                     <div class="input-group">
+                        <span class="input-group-addon" id="sizing-addon1"> Адрес предприятия </span>
+                        <input type="text" name="adr" class="form-control"  value="{{ ent_adr }}"  aria-describedby="sizing-addon1">
+                    </div>
+
+                    <div class="input-group">
+                        <span class="input-group-addon" id="sizing-addon1"> Телефон предприятия </span>
+                        <input type="text" name="tel" class="form-control"  value="{{ ent_tel }}"  aria-describedby="sizing-addon1">
+                    </div>
+
+             </div>
+
+             </div>
+
+             <div class="row">
+
+             <div class="col-lg-2">
+
+
+
+                 <div class="input-group">
+                 <span class="input-group-addon" id="sizing-addon1"> Код ГВК </span>
+                 <input type="text" name="gup" class="form-control"  value="{{ ent_gup }}"  aria-describedby="sizing-addon1">
+                  </div>
+              </div>
+
+             <div class="col-lg-2">
+
+                 <div class="input-group">
+                 <span class="input-group-addon" id="sizing-addon1"> УНН </span>
+                 <input type="text" name="oku" class="form-control"  value="{{ ent_oku }}"  aria-describedby="sizing-addon1">
+                  </div>
+
+            </div>
+
+               <div class="col-lg-4">
+
+                 <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1"> ОКПО </span>
+                   <input type="text" name="okp" class="form-control"  value="{{ ent_okp }}"  aria-describedby="sizing-addon1">
+                 </div>
+
+            </div>
+
+             </div>
+
+
+
+             <div class="row">
+
+
+               <div class="col-lg-5">
+
+
+
+
+                   <label for="basic-url"> Раздел I - ВОДОПОТРЕБЛЕНИЕ </label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3"> Количество строк </span>
+                        <input type="number" name="numRazdel1" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    </div>
+
+                   <label for="basic-url"> Раздел II - ВОДООТВЕДЕНИЕ </label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3"> Количество строк </span>
+                        <input type="number" name="numRazdel2" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    </div>
+
+                   <label for="basic-url"> Раздел III - СОДЕРЖАНИЕ ЗАГРЯЗНЯЮЩИХ ВЕЩЕСТВ ... </label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3"> Количество строк </span>
+                        <input type="number" name="numRazdel3" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    </div>
+
+
+               </div>
+          </div>
+
+
+               <div class="col-lg-10">
+                   <p> </p>
+                 <div class="row">
+                    <button type="submit"  value="Submit" class="btn btn-primary">Принять </button>
+                 </div>
+               </div>
+
+         </div>
+
+     </form>
+
+
+
+{% endifequal %}
+
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+<script src="{% static 'js/jquery.formset.js' %}"></script>
+<script>
+    $('.link-formset').formset({
+        addText: 'add link',
+        deleteText: 'remove'
+    });
+</script>
+
+
+
+{% endblock %}

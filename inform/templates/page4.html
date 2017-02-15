@@ -1,0 +1,164 @@
+{% extends "layout4.html" %}
+
+{%  load static %}
+
+{% block title %}  {% endblock %}
+
+{% block head %}
+    <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" />
+    <link href="http://js-grid.com/css/jsgrid-theme.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <div id="jsGrid"></div>
+
+
+      <form role="form"  action="." method="post"> {% csrf_token %} {{ form }}
+
+      <input type="submit"  name="Razdel4" value=" Завершить заполнение формы "  onchange="this.form.submit();"/>
+
+
+</form>
+
+
+     <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <hr class="small">
+                    <p class="text-muted">Copyright &copy; РУП ЦНИИКИВР 2016 </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="http://js-grid.com/js/jsgrid.min.js"></script>
+
+    <script>
+
+        var tt = {{ source_code|safe }}
+
+        $(function() {
+
+        function WaterField(config) {
+        jsGrid.NumberField.call(this, config);
+}
+
+        WaterField.prototype = new jsGrid.NumberField({
+
+        itemTemplate: function(value) {
+        return " " + value.toFixed(0) + "";
+         },
+
+        filterValue: function() {
+        return parseFloat(this.filterControl.val() || 0);
+        },
+
+        insertValue: function() {
+        return parseFloat(this.insertControl.val() || 0);
+        },
+
+        editValue: function() {
+        return parseFloat(this.editControl.val() || 0);
+        }
+
+});
+
+jsGrid.fields.water = WaterField;
+
+            $("#jsGrid").jsGrid({
+                height: "75%",
+                width: "100%",
+
+                filtering: false,
+                inserting: false,
+                editing: true,
+                sorting: true,
+                paging: false,
+                autoload: true,
+
+                pageSize: 10,
+                pageButtonCount: 5,
+
+
+
+                editButton: true,                               // show edit button
+                deleteButton: false,                             // show delete button
+                clearFilterButton: false,                        // show clear filter button
+                modeSwitchButton: false,                         // show switching filtering/inserting button
+
+                 align: "center",                                // center content alignment
+                                        // disable sorting for column
+
+                 searchModeButtonTooltip: "Switch to searching", // tooltip of switching filtering/inserting button in inserting mode
+                 insertModeButtonTooltip: "Switch to inserting", // tooltip of switching filtering/inserting button in filtering mode
+                 editButtonTooltip: "Редактировать",                      // tooltip of edit item button
+                 deleteButtonTooltip: "Удалить",                  // tooltip of delete item button
+                 searchButtonTooltip: "Search",                  // tooltip of search button
+                 clearFilterButtonTooltip: "Clear filter",       // tooltip of clear filter button
+                 insertButtonTooltip: "Insert",                  // tooltip of insert button
+                 updateButtonTooltip: "Update",                  // tooltip of update item button
+                 cancelEditButtonTooltip: "Cancel edit",         // tooltip of cancel editing button
+
+
+                 deleteConfirm: " Вы хотите удалить запись?",
+
+                 controller: {
+                    loadData: function(filter) {
+                        var d = $.Deferred();
+
+                        $.ajax({
+                            type: "GET",
+                            url: "/inform/api",
+                            data: filter
+                        }).done(function(result) {
+                            d.resolve($.map(result, function(item) {
+                                return $.extend(item.fields, { id: item.pk });
+                            }));
+                        });
+
+                        return d.promise();
+                    },
+
+                    insertItem: function(item) {
+                        return $.ajax({
+                            type: "POST",
+                            url: "/inform/api",
+                            data: item
+                        });
+                    },
+
+                    updateItem: function(item) {
+                        return $.ajax({
+                            type: "PUT",
+                            url: "/inform/api/" + item.id,
+                            data: item
+                        });
+                    },
+
+                     deleteItem: function(item) {
+                        return $.ajax({
+                            type: "DELETE",
+                            url: "/inform/api/" + item.id
+                        });
+                    }
+
+                },
+               fields: [
+                   { name: "value_str", title: 'Наименование показателя', width: 120 , readOnly : true },
+                   { name: "kod_str4", title: 'Код строки' ,width: 10, align : "center"},
+
+                   { name: "value", type: "water", title: ' Всего на конец отчетного года', width: 30, align : "center" },
+
+
+                   { type: "control" }
+                ]
+            });
+
+          });
+    </script>
+{% endblock %}

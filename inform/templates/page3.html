@@ -1,0 +1,181 @@
+{% extends "layout3.html" %}
+
+{%  load static %}
+
+{% block title %}  {% endblock %}
+
+{% block head %}
+    <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" />
+    <link href="http://js-grid.com/css/jsgrid-theme.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <div id="jsGrid"></div>
+
+
+      <form role="form"  action="." method="post"> {% csrf_token %} {{ form }}
+
+      <input type="submit"  name="Razdel3" value=" Принять и перейти к последнему разделу "  onchange="this.form.submit();"/>
+
+
+</form>
+
+
+     <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <hr class="small">
+                    <p class="text-muted">Copyright &copy; РУП ЦНИИКИВР 2016 </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="http://js-grid.com/js/jsgrid.min.js"></script>
+
+    <script>
+
+        var tt = {{ source_code|safe }}
+
+        $(function() {
+
+        function WaterField(config) {
+        jsGrid.NumberField.call(this, config);
+}
+
+        WaterField.prototype = new jsGrid.NumberField({
+
+        itemTemplate: function(value) {
+        return " " + value.toFixed(3) + "";
+         },
+
+        filterValue: function() {
+        return parseFloat(this.filterControl.val() || 0);
+        },
+
+        insertValue: function() {
+        return parseFloat(this.insertControl.val() || 0);
+        },
+
+        editValue: function() {
+        return parseFloat(this.editControl.val() || 0);
+        }
+
+});
+
+jsGrid.fields.water = WaterField;
+
+            $("#jsGrid").jsGrid({
+                height: "75%",
+                width: "210%",
+
+                filtering: false,
+                inserting: false,
+                editing: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+
+                pageSize: 10,
+                pageButtonCount: 5,
+
+
+
+                editButton: true,                               // show edit button
+                deleteButton: false,                             // show delete button
+                clearFilterButton: false,                        // show clear filter button
+                modeSwitchButton: false,                         // show switching filtering/inserting button
+
+                 align: "center",                                // center content alignment
+                                        // disable sorting for column
+
+                 searchModeButtonTooltip: "Switch to searching", // tooltip of switching filtering/inserting button in inserting mode
+                 insertModeButtonTooltip: "Switch to inserting", // tooltip of switching filtering/inserting button in filtering mode
+                 editButtonTooltip: "Редактировать",                      // tooltip of edit item button
+                 deleteButtonTooltip: "Удалить",                  // tooltip of delete item button
+                 searchButtonTooltip: "Search",                  // tooltip of search button
+                 clearFilterButtonTooltip: "Clear filter",       // tooltip of clear filter button
+                 insertButtonTooltip: "Insert",                  // tooltip of insert button
+                 updateButtonTooltip: "Update",                  // tooltip of update item button
+                 cancelEditButtonTooltip: "Cancel edit",         // tooltip of cancel editing button
+
+
+                 deleteConfirm: " Вы хотите удалить запись?",
+
+                 controller: {
+                    loadData: function(filter) {
+                        var d = $.Deferred();
+
+                        $.ajax({
+                            type: "GET",
+                            url: "/inform/api",
+                            data: filter
+                        }).done(function(result) {
+                            d.resolve($.map(result, function(item) {
+                                return $.extend(item.fields, { id: item.pk });
+                            }));
+                        });
+
+                        return d.promise();
+                    },
+
+                    insertItem: function(item) {
+                        return $.ajax({
+                            type: "POST",
+                            url: "/inform/api",
+                            data: item
+                        });
+                    },
+
+                    updateItem: function(item) {
+                        return $.ajax({
+                            type: "PUT",
+                            url: "/inform/api/" + item.id,
+                            data: item
+                        });
+                    },
+
+                     deleteItem: function(item) {
+                        return $.ajax({
+                            type: "DELETE",
+                            url: "/inform/api/" + item.id
+                        });
+                    }
+
+                },
+               fields: [
+                   { name: "kod_str3", type: "number", title: 'Код строки', width: 4 , readOnly : true },
+                   { name: "location_outlet", type: "text",title: 'Местонахождение выпуска вод' ,width: 60 },
+                   { name: "bod5", type: "water", title: ' БПК5, тонн ', width: 30, align : "center" },
+                   { name: "cod", type: "water", title: ' ХПК, тонн ', width: 30, align : "center" },
+                   { name: "ssolids", type: "water", title: ' Взвешенные в-ва, тонн ', width: 30, align : "center" },
+                   { name: "mineral", type: "water", title: ' Минерализация, тонн ', width: 30, align : "center" },
+                   { name: "sulphate", type: "water", title: ' Сульфат-ион, тонн ', width: 30, align : "center" },
+                   { name: "chloride", type: "water", title: ' Хлорид-ион, тонн ', width: 30, align : "center" },
+                   { name: "phosp_ion", type: "water", title: ' Фосфат-ион, тонн ', width: 30, align : "center" },
+                   { name: "totalp", type: "water", title: ' Фосфор общий, тонн ', width: 30, align : "center" },
+                   { name: "nh4", type: "water", title: ' Аммоний-ион, тонн ', width: 30, align : "center" },
+                   { name: "no2", type: "water", title: ' Нитрит-ион, тонн ', width: 30, align : "center" },
+                   { name: "no3", type: "water", title: ' Нитрат-ион, тонн ', width: 30, align : "center" },
+                   { name: "detergents", type: "water", title: ' СПАВ (анион-активные), тонн ', width: 30, align : "center" },
+                   { name: "oil_p", type: "water", title: ' Нефтепродукты, тонн ', width: 30, align : "center" },
+                   { name: "fe_tot", type: "water", title: ' Железо общее, тонн ', width: 30, align : "center" },
+                   { name: "cr_tot", type: "water", title: ' Хром общий, тонн ', width: 30, align : "center" },
+                   { name: "ni", type: "water", title: ' Никель, тонн ', width: 30, align : "center" },
+                   { name: "cu", type: "water", title: ' Медь, тонн ', width: 30, align : "center" },
+                   { name: "lead", type: "water", title: ' Свинец, тонн ', width: 30, align : "center" },
+                   { name: "mercury", type: "water", title: ' Ртуть, тонн ', width: 30, align : "center" },
+                   { name: "zink", type: "water", title: ' Цинк, тонн ', width: 30, align : "center" },
+
+                   { type: "control" }
+                ]
+            });
+
+          });
+    </script>
+{% endblock %}

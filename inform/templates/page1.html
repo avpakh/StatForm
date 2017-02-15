@@ -12,6 +12,14 @@
 {% block content %}
     <div id="jsGrid"></div>
 
+
+      <form role="form"  action="." method="post"> {% csrf_token %} {{ form }}
+
+      <input type="submit"  name="Razdel1" value=" Принять и перейти к следующему разделу II Водоотведение "  onchange="this.form.submit();"/>
+
+
+      </form>
+
       <!-- Footer -->
     <footer>
         <div class="container">
@@ -63,10 +71,10 @@ jsGrid.fields.water = WaterField;
 
             $("#jsGrid").jsGrid({
                 height: "75%",
-                width: "310%",
+                width: "330%",
 
                 filtering: false,
-                inserting: true,
+                inserting: false,
                 editing: true,
                 sorting: true,
                 paging: true,
@@ -123,6 +131,7 @@ jsGrid.fields.water = WaterField;
                         });
                     },
 
+
                     updateItem: function(item) {
                         return $.ajax({
                             type: "PUT",
@@ -131,16 +140,17 @@ jsGrid.fields.water = WaterField;
                         });
                     },
 
+
+
                      deleteItem: function(item) {
                         return $.ajax({
                             type: "DELETE",
                             url: "/inform/api/" + item.id
                         });
                     }
-
                 },
                fields: [
-                   { name: "kod_str", type: "number", title: 'Код строки', width: 4 , readOnly : true },
+                   { name: "kod_str", title: 'Код строки', width: 4 , readOnly : true },
                    { name: "source_kod", type: "select", title:'Код источника водоснабжения',
                             items: [
                               { Name: " - введите - ", Id: 0 },
@@ -154,6 +164,7 @@ jsGrid.fields.water = WaterField;
                               { Name: "[70] пруд ", Id: 70 },
                               { Name: "[71] пруд-копань ", Id: 71 },
                               { Name: "[73] обводненный карьер ", Id: 73 },
+                              { Name: "[72] технологический водный объект ", Id: 72 },
                               { Name: "[74] Шахта, рудник, нефтепромысел, карьер ", Id: 74 },
                               { Name: "[75] Скважины вертикального дренажа для понижения уровня грунтовых вод ", Id: 75 },
                       ],
@@ -202,6 +213,7 @@ jsGrid.fields.water = WaterField;
                     { name: "param_2", title: 'из них учтено приборами учета,  ', type: "water", width: 30, align : "center" },
                     { name: "param_3", title: 'Получено воды - объем, тыс. куб. м,  ', type: "water", width: 30, align : "center" },
                     { name: "kod_wateruser_gvk", title: 'Код водоп-ля по ГВК,  ', type: "text", width: 30 },
+
                     { name: "use_total", title: 'Использовано воды - Всего, тыс. куб. м,  ', type: "water", width: 25,align : "center" },
 
                      { name: "use_tag1", title: 'Код цели водоп-я', type: "select",
@@ -312,7 +324,6 @@ jsGrid.fields.water = WaterField;
 
                      width: 30, align : "left" },
 
-
                     { name: "vol_wu1", title: ' Передано воды без использования или отведения с учетом его качества, тыс. куб. м', type: "water", width: 45, align : "center"},
 
                     { name: "trf_cod_wu2", title: 'Код категории качества воды', type: "select",
@@ -392,6 +403,7 @@ jsGrid.fields.water = WaterField;
 
                     { name: "vol_au", title: 'Передано  воды после  использования или отведения с учетом его качества, тыс. куб. м', type: "water", width: 45, align : "center"},
 
+                    { name: "code_gvk_au", title: 'Код водоп-ля по ГВК,  ', type: "text", width: 30 },
 
                     { name: "lost_total", title: 'Потери и неучтенные раcходы воды - Всего, тыс. куб. м', type: "water", width: 35, align : "center"},
 

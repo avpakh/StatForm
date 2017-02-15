@@ -1,0 +1,87 @@
+{% extends "index_form.html" %}
+
+{%  load static %}
+
+ {% load render_table from django_tables2 %}
+
+{% load crispy_forms_tags %}
+
+{%  block content %}
+
+
+
+    <head>
+
+        <link href="{% static 'django_tables2/bootstrap-tables2.css' %}" rel="stylesheet" />
+        <link href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" rel="stylesheet" />
+
+    </head>
+
+
+     <body>
+
+    </body>
+
+     <style>
+
+    .checkbox-grid li {
+    display: block;
+    float: left;
+    width: 50%;
+     }
+    </style>
+
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+                <div class="col-lg-10">
+                    <h4 class="page-header"> Поиск данных по предприятию по реквизитам </h4>
+                </div>
+               <!-- /.col-lg-12 -->
+            </div>
+
+
+       <div class=container">
+        <div class="row"> </div>
+            <div class="col-lg-6">
+
+
+                <hr/>
+                <form action="/inform/result/" method="get">
+
+                  {% crispy filter.form filter.form.helper  %}
+
+                </form>
+
+
+                <div class="panel panel-default">
+                   <div class="divider">
+                   </div>
+
+             </div>
+
+                </div>
+
+               <div class="row">  </div>
+            <div class="col-lg-12">
+
+            </div>
+
+
+
+
+
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+
+   <script src="{%  static "js/exporting.js" %}"></script>
+   <script src="{%  static "js/export-csv.js" %}"></script>
+
+
+<body>
+
+</body>
+
+
+
+
+{% endblock content %}

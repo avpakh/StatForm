@@ -1,0 +1,5 @@
+﻿INSERT INTO public.inform_entdbspr (npr,adr,okp,oku,gup,tel,vxu)
+ select npr,adr,okp,oku,gup,tel,vxu
+ from
+ public."ENT_SPR";
+
